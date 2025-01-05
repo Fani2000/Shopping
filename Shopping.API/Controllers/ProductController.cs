@@ -1,26 +1,29 @@
 using Microsoft.AspNetCore.Mvc;
-using Shopping.Client.Models;
+using MongoDB.Driver;
+using Shopping.Api.Data;
+using Shopping.Api.Models;
 
 namespace Shopping.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductController(ILogger<ProductController> logger) : ControllerBase
+    public class ProductController(ILogger<ProductController> logger, ProductContext context) : ControllerBase
     {
         // GET: api/Product
         [HttpGet]
-        public ActionResult<IEnumerable<Product>> GetAll()
+        public async Task<ActionResult<IEnumerable<Product>>> GetAll()
         {
             logger.LogInformation("Fetching all products");
-            return Ok(ProductContext.Products);
+            var product = await context.Products.Find(p => true).ToListAsync();
+            return Ok(product);
         }
 
         // GET: api/Product/{id}
         [HttpGet("{id}")]
-        public ActionResult<Product> GetOne(string id)
+        public async Task<ActionResult<Product>> GetOne(string id)
         {
             logger.LogInformation($"Fetching product with ID: {id}");
-            var product = ProductContext.Products.FirstOrDefault(p => p.Id == id);
+            var product = await context.Products.FindAsync(p => p.Id == id);
 
             if (product == null)
             {
