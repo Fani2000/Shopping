@@ -2,11 +2,12 @@
 {
     public static class HttpExtension
     {
-        public static void AddHttpExtension(this IServiceCollection services)
+        public static void AddHttpExtension(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddHttpClient("shoppingApiClient", Client =>
             {
-                Client.BaseAddress = new Uri("http://localhost:5000");
+                var url = configuration.GetValue<string>("ShoppingAPIUrl");
+                Client.BaseAddress = new Uri(url);
             });
         }
     }
