@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Shopping.Client.Models;
 
@@ -7,15 +8,28 @@ namespace Shopping.Client.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
+    private readonly HttpClient httpClient;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ILogger<HomeController> logger, IHttpClientFactory httpClientFactory)
     {
         _logger = logger;
+        httpClient = httpClientFactory.CreateClient("shoppingApiClient");
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View(ProductContext.Products);
+
+        var response = await httpClient.GetAsync("/api/Product");
+        var content = await response.Content.ReadAsStringAsync();
+        
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true // Allows case-insensitivity but preserves original capitalization
+        };
+
+        var productList = JsonSerializer.Deserialize<IEnumerable<Product>>(content, options);
+
+        return View(productList);
     }
 
     public IActionResult Privacy()
