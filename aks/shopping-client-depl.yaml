@@ -50,4 +50,4 @@ spec:
     app: shoppingclient
   ports:
     - protocol: TCP
-      port: 80
+      port: 8000
