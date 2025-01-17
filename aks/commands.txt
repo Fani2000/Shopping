@@ -125,3 +125,9 @@ Clean All AKS and Azure Resources
 
 az group delete --name myResourceGroup --yes --no-wait
 
+---- Create Kubectl secrets
+
+kubectl create secret docker-registry acr-secret --docker-server= --docker-username= --docker-password= --docker-email=
+
+--- Check kubectl secret -- 
+kubectl get secret

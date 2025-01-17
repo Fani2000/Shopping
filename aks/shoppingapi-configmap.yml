@@ -1,0 +1,6 @@
+﻿apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: shoppingapi-configmap
+data:
+  shoppingapi_url: "http://shoppingapi-service"
