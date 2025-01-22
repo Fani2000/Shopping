@@ -35,7 +35,6 @@ spec:
             limits:
               memory: "128Mi"
               cpu: "500m"
-              
       imagePullSecrets:
         - name: acr-secret
               
@@ -50,4 +49,5 @@ spec:
     app: shoppingclient
   ports:
     - protocol: TCP
-      port: 8000
+      port: 80
+      targetPort: 8080
